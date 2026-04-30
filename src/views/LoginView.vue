@@ -312,7 +312,7 @@ const doLogout = async () => {
   padding: 20px;
 }
 .card {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(55, 68, 63, 0.651);
   backdrop-filter: blur(30px);
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 32px;
@@ -447,7 +447,7 @@ const doLogout = async () => {
 .submit-btn {
   width: 100%;
   padding: 14px;
-  background: linear-gradient(90deg, #48bb78, #0dbd56);
+  background: linear-gradient(90deg, #183825, #02ff6b);
   border: none;
   border-radius: 14px;
   color: #1a1000;
