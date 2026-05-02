@@ -2,7 +2,7 @@
   <nav class="navbar" v-if="user">
     <div class="nav-inner">
       <!-- لوجو -->
-      <router-link to="/ Home" class="nav-logo">
+      <router-link to="/Home" class="nav-logo">
         <div class="logo-icon-wrap">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
             <path d="M12 2L2 7l10 5 10-5-10-5z" fill="#f0c060" />
@@ -26,6 +26,16 @@
           <span class="logo-dot">●</span>
         </div>
       </router-link>
+      <div class="nav-links" :class="{ open: menuOpen }">
+        <router-link to="/providers" class="nav-link nav-btn">
+          Providers
+        </router-link>
+
+        <router-link to="/provider" class="nav-link nav-btn">
+          Provider
+        </router-link>
+      </div>
+
       <!-- يمين: إعدادات فقط -->
       <div class="nav-right">
         <!-- زر الإعدادات -->
@@ -123,51 +133,18 @@
                   <span class="toggle-thumb"></span>
                 </button>
               </div>
-
-              <div class="drop-divider"></div>
-
-              <!-- خروج -->
-              <button class="drop-item logout-item" @click="handleLogout">
-                <span class="drop-icon">
-                  <svg
-                    width="15"
-                    height="15"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                    <polyline points="16 17 21 12 16 7" />
-                    <line x1="21" y1="12" x2="9" y2="12" />
-                  </svg>
-                </span>
-                <span>تسجيل الخروج</span>
-              </button>
             </div>
           </transition>
         </div>
-
-        <!-- برجر موبايل -->
-        <button
-          class="burger"
-          @click="menuOpen = !menuOpen"
-          :class="{ active: menuOpen }"
-        >
-          <span></span><span></span><span></span>
-        </button>
       </div>
     </div>
   </nav>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { ref, onMounted, onUnmounted } from "vue";
 import { supabase } from "../supabase";
 
-const router = useRouter();
-const route = useRoute();
 const user = ref(null);
 const isAdmin = ref(false);
 const menuOpen = ref(false);
@@ -199,16 +176,6 @@ onMounted(() => {
 onUnmounted(() => {
   document.removeEventListener("click", handleOutsideClick);
 });
-
-watch(
-  () => route.path,
-  () => {
-    loadUser();
-    settingsOpen.value = false;
-    menuOpen.value = false;
-  }
-);
-
 const handleOutsideClick = (e) => {
   if (settingsRef.value && !settingsRef.value.contains(e.target)) {
     settingsOpen.value = false;
@@ -218,12 +185,6 @@ const handleOutsideClick = (e) => {
 const toggleDark = () => {
   isDark.value = !isDark.value;
   document.documentElement.classList.toggle("dark", isDark.value);
-};
-
-const handleLogout = async () => {
-  settingsOpen.value = false;
-  await supabase.auth.signOut();
-  router.push("/");
 };
 </script>
 
@@ -299,7 +260,7 @@ const handleLogout = async () => {
 
 /* ===== لينكات ===== */
 .nav-links {
-  display: none;
+  display: flex;
   align-items: center;
   gap: 2px;
   flex: 1;
