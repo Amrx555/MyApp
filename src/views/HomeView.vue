@@ -56,7 +56,6 @@ onMounted(async () => {
     userName.value =
       data.user.user_metadata?.full_name || data.user.email.split("@")[0];
 
-    // التحقق من الصلاحيات
     const { data: profile } = await supabase
       .from("profiles")
       .select("role")
@@ -68,7 +67,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/* استيراد نفس أساسيات التصميم اللي في صفحة البروفايل لضمان التناسق */
 .auth-container {
   font-family: "Cairo", sans-serif;
   min-height: 100vh;
@@ -78,67 +76,6 @@ onMounted(async () => {
   padding-top: 80px; /* لترك مساحة للـ Navbar الثابت */
 }
 
-/* Navbar */
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 70px;
-  background: rgba(5, 5, 10, 0.8);
-  backdrop-filter: blur(15px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-}
-.nav-content {
-  width: 90%;
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.logo {
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: 1px;
-}
-.logo span {
-  color: #48bb78;
-}
-
-.nav-links {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-}
-.nav-item {
-  color: #a0aec0;
-  text-decoration: none;
-  font-weight: 600;
-  transition: 0.3s;
-}
-.nav-item:hover,
-.nav-item.active {
-  color: #48bb78;
-}
-.admin-link {
-  color: #b794f4;
-}
-
-.nav-btn-logout,
-.nav-btn-login {
-  padding: 8px 18px;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
-  cursor: pointer;
-}
-
-/* Hero Section */
 .hero-section {
   padding: 60px 40px;
   text-align: center;
@@ -173,7 +110,6 @@ onMounted(async () => {
   box-shadow: 0 10px 20px rgba(72, 187, 120, 0.3);
 }
 
-/* Features Grid */
 .features-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -207,7 +143,6 @@ onMounted(async () => {
   margin-top: 15px;
 }
 
-/* Reuse styles from your profile page */
 .bg-visuals {
   position: absolute;
   inset: 0;

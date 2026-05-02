@@ -957,7 +957,6 @@ const handleLogout = async () => {
   background: rgba(99, 179, 237, 0.25);
 }
 
-/* ✅ زر الحذف */
 .btn-delete {
   background: rgba(180, 50, 50, 0.12);
   border: 1px solid rgba(180, 50, 50, 0.3);

@@ -1,7 +1,6 @@
 <template>
   <nav class="navbar" v-if="user">
     <div class="nav-inner">
-      <!-- لوجو -->
       <router-link to="/Home" class="nav-logo">
         <div class="logo-icon-wrap">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -36,9 +35,7 @@
         </router-link>
       </div>
 
-      <!-- يمين: إعدادات فقط -->
       <div class="nav-right">
-        <!-- زر الإعدادات -->
         <div class="settings-wrap" ref="settingsRef">
           <button
             class="settings-btn"
@@ -61,10 +58,8 @@
             </svg>
           </button>
 
-          <!-- دروب داون -->
           <transition name="drop">
             <div class="settings-dropdown" v-if="settingsOpen">
-              <!-- حسابي -->
               <router-link
                 to="/dashboard"
                 class="drop-item"
@@ -86,7 +81,6 @@
                 <span>حسابي</span>
               </router-link>
 
-              <!-- لوحة الإدارة -->
               <router-link
                 v-if="isAdmin"
                 to="/admin"
@@ -110,7 +104,6 @@
 
               <div class="drop-divider"></div>
 
-              <!-- دارك مود -->
               <div class="drop-item toggle-item">
                 <span class="drop-icon">
                   <svg
@@ -216,7 +209,6 @@ const toggleDark = () => {
   gap: 24px;
 }
 
-/* ===== لوجو ===== */
 .nav-logo {
   display: flex;
   align-items: center;
@@ -258,7 +250,6 @@ const toggleDark = () => {
   margin-top: 2px;
 }
 
-/* ===== لينكات ===== */
 .nav-links {
   display: flex;
   align-items: center;
@@ -301,7 +292,6 @@ const toggleDark = () => {
   font-family: "Cairo", sans-serif;
 }
 
-/* ===== يمين ===== */
 .nav-right {
   display: flex;
   align-items: center;
@@ -309,7 +299,6 @@ const toggleDark = () => {
   margin-right: auto;
 }
 
-/* ===== زر الإعدادات ===== */
 .settings-wrap {
   position: relative;
 }
@@ -338,7 +327,6 @@ const toggleDark = () => {
   color: #f0c060;
 }
 
-/* ===== دروب داون ===== */
 .settings-dropdown {
   position: absolute;
   top: calc(100% + 10px);
@@ -415,7 +403,6 @@ const toggleDark = () => {
   margin: 4px 0;
 }
 
-/* دارك مود توجل */
 .toggle-item {
   justify-content: space-between;
 }
@@ -453,7 +440,6 @@ const toggleDark = () => {
   transform: translateX(-17px);
 }
 
-/* ===== انيميشن دروب داون ===== */
 .drop-enter-active,
 .drop-leave-active {
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -464,7 +450,6 @@ const toggleDark = () => {
   transform: translateY(-8px) scale(0.97);
 }
 
-/* ===== برجر ===== */
 .burger {
   display: none;
   flex-direction: column;
