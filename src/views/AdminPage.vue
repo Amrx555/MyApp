@@ -20,7 +20,6 @@
           </div>
         </div>
         <div class="header-actions">
-          <!-- جرس الإشعارات -->
           <button class="notif-btn" @click="activeTab = 'pending'">
             🔔
             <span class="notif-badge" v-if="pendingAdmins.length">
@@ -122,20 +121,20 @@
               <div class="card-details" v-if="expandedId === u.id">
                 <div class="detail-grid">
                   <div class="detail-item">
-                    <span class="d-label">📧 الإيميل</span
-                    ><span class="d-value">{{ u.email }}</span>
+                    <span class="d-label">📧 الإيميل</span>
+                    <span class="d-value">{{ u.email }}</span>
                   </div>
                   <div class="detail-item">
-                    <span class="d-label">👤 الاسم</span
-                    ><span class="d-value">{{ u.full_name || "—" }}</span>
+                    <span class="d-label">👤 الاسم</span>
+                    <span class="d-value">{{ u.full_name || "—" }}</span>
                   </div>
                   <div class="detail-item">
-                    <span class="d-label">📞 الهاتف</span
-                    ><span class="d-value">{{ u.phone || "—" }}</span>
+                    <span class="d-label">📞 الهاتف</span>
+                    <span class="d-value">{{ u.phone || "—" }}</span>
                   </div>
                   <div class="detail-item">
-                    <span class="d-label">📅 تسجيل</span
-                    ><span class="d-value">{{ formatDate(u.created_at) }}</span>
+                    <span class="d-label">📅 تسجيل</span>
+                    <span class="d-value">{{ formatDate(u.created_at) }}</span>
                   </div>
                   <div class="detail-item">
                     <span class="d-label">🚦 الحالة</span>
@@ -147,6 +146,7 @@
                     </span>
                   </div>
                 </div>
+
                 <div class="action-btns">
                   <button
                     class="action-btn"
@@ -168,7 +168,11 @@
                   >
                     ✉️ إيميل
                   </button>
+                  <button class="action-btn btn-delete" @click="deleteUser(u)">
+                    🗑️ حذف
+                  </button>
                 </div>
+
                 <div class="msg-box" v-if="msgTarget?.id === u.id">
                   <p class="msg-label">
                     {{
@@ -209,7 +213,6 @@
           <div class="spinner-lg"></div>
         </div>
       </div>
-
       <!-- ===== تاب الأدمنز ===== -->
       <div v-if="activeTab === 'admins'">
         <div class="users-grid">
@@ -293,7 +296,9 @@
 import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { supabase } from "../supabase";
+
 const OWNER_EMAIL = "amri69217@gmail.com";
+
 const router = useRouter();
 const screen = ref("loading");
 const currentAdmin = ref(null);
@@ -305,6 +310,7 @@ const searchQuery = ref("");
 const msgTarget = ref(null);
 const msgText = ref("");
 const activeTab = ref("users");
+
 const normalUsers = computed(() =>
   users.value.filter((u) => !u.role || u.role === "user")
 );
@@ -390,6 +396,30 @@ const removeAdmin = async (u) => {
   u.role = "user";
 };
 
+// ✅ حذف المستخدم كلياً
+const deleteUser = async (u) => {
+  if (
+    !confirm(
+      `⚠️ هل أنت متأكد من حذف حساب "${
+        u.full_name || u.email
+      }"؟\nلا يمكن التراجع عن هذا الإجراء!`
+    )
+  )
+    return;
+
+  // حذف من جدول profiles
+  const { error } = await supabase.from("profiles").delete().eq("id", u.id);
+
+  if (error) {
+    alert("حدث خطأ أثناء الحذف: " + error.message);
+    return;
+  }
+
+  // إزالة فورية من الواجهة
+  users.value = users.value.filter((x) => x.id !== u.id);
+  expandedId.value = null;
+};
+
 const sendWhatsApp = (phone, text) => {
   let p = phone.replace(/\D/g, "");
   if (p.startsWith("0")) p = "20" + p.slice(1);
@@ -432,13 +462,14 @@ const getAvatar = (u) => {
     u.full_name || u.email || "U"
   )}&background=f0c060&color=1a1000&size=128`;
 };
+
 const formatDate = (d) => new Date(d).toLocaleDateString("ar-EG");
+
 const handleLogout = async () => {
   await supabase.auth.signOut();
   router.push("/");
 };
 </script>
-
 <style scoped>
 * {
   box-sizing: border-box;
@@ -467,7 +498,7 @@ const handleLogout = async () => {
 .blob-1 {
   width: 600px;
   height: 600px;
-  background: #48bb78;
+  background: rgba(55, 77, 42, 0);
   top: -15%;
   left: -10%;
 }
@@ -493,7 +524,6 @@ const handleLogout = async () => {
   padding: 30px 20px 60px;
 }
 
-/* هيدر */
 .dash-header {
   display: flex;
   justify-content: space-between;
@@ -574,7 +604,6 @@ const handleLogout = async () => {
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* تابس */
 .tabs {
   display: flex;
   gap: 8px;
@@ -599,7 +628,7 @@ const handleLogout = async () => {
 .tab.active {
   background: rgba(240, 192, 96, 0.12);
   border-color: rgba(240, 192, 96, 0.35);
-  color: #48bb78;
+  color: #568f30bd;
 }
 .tab-count {
   background: rgba(255, 255, 255, 0.1);
@@ -610,14 +639,13 @@ const handleLogout = async () => {
 }
 .tab.active .tab-count {
   background: rgba(240, 192, 96, 0.2);
-  color: #48bb78;
+  color: #5dcf11ef;
 }
 .tab-count.urgent {
   background: rgba(252, 100, 100, 0.2);
   color: #fc8181;
 }
 
-/* إحصائيات */
 .stats-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -658,7 +686,7 @@ const handleLogout = async () => {
 .stat-num {
   font-size: 26px;
   font-weight: 700;
-  color: #48bb78;
+  color: #f0c060;
   line-height: 1;
 }
 .stat-card.red .stat-num {
@@ -672,7 +700,6 @@ const handleLogout = async () => {
   color: #718096;
 }
 
-/* بحث */
 .search-bar {
   margin-bottom: 18px;
 }
@@ -689,17 +716,16 @@ const handleLogout = async () => {
   transition: 0.25s;
 }
 .search-input:focus {
-  border-color: #48bb78;
+  border-color: #f0c060;
 }
 .search-input::placeholder {
   color: #4a5568;
 }
 
-/* كروت */
 .users-grid {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 7px;
 }
 .user-card {
   background: rgba(255, 255, 255, 0.03);
@@ -807,7 +833,7 @@ const handleLogout = async () => {
 .role-badge {
   background: rgba(240, 192, 96, 0.12);
   border: 1px solid rgba(240, 192, 96, 0.28);
-  color: #48bb78;
+  color: #20aa27;
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 12px;
@@ -831,7 +857,6 @@ const handleLogout = async () => {
   background: rgba(252, 100, 100, 0.25);
 }
 
-/* تفاصيل */
 .card-details {
   padding: 16px 18px 18px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -871,7 +896,6 @@ const handleLogout = async () => {
   color: #fc8181 !important;
 }
 
-/* أزرار */
 .action-btns {
   display: flex;
   gap: 8px;
@@ -883,6 +907,7 @@ const handleLogout = async () => {
   gap: 8px;
   padding: 0 18px 16px;
 }
+
 .action-btn {
   flex: 1;
   min-width: 80px;
@@ -932,7 +957,16 @@ const handleLogout = async () => {
   background: rgba(99, 179, 237, 0.25);
 }
 
-/* رسالة */
+/* ✅ زر الحذف */
+.btn-delete {
+  background: rgba(180, 50, 50, 0.12);
+  border: 1px solid rgba(180, 50, 50, 0.3);
+  color: #f87171;
+}
+.btn-delete:hover {
+  background: rgba(180, 50, 50, 0.28);
+}
+
 .msg-box {
   background: rgba(255, 255, 255, 0.035);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -958,7 +992,7 @@ const handleLogout = async () => {
   transition: 0.25s;
 }
 .msg-textarea:focus {
-  border-color: #48bb78;
+  border-color: #369636;
 }
 .msg-textarea::placeholder {
   color: #4a5568;
@@ -971,14 +1005,13 @@ const handleLogout = async () => {
 }
 .send-btn {
   padding: 9px 22px;
-  background: linear-gradient(90deg, #48bb78, #32e27b);
+  background: linear-gradient(90deg, #369636, #186918);
   border: none;
   border-radius: 10px;
   color: #1a1000;
   font-family: "Cairo", sans-serif;
   font-weight: 700;
   cursor: pointer;
-  transition: 0.25s;
 }
 .send-btn:hover {
   transform: translateY(-1px);
@@ -993,7 +1026,6 @@ const handleLogout = async () => {
   cursor: pointer;
 }
 
-/* pending */
 .pending-header {
   display: flex;
   justify-content: space-between;
@@ -1024,7 +1056,6 @@ const handleLogout = async () => {
   font-size: 14px;
 }
 
-/* انيميشن */
 .slide-enter-active,
 .slide-leave-active {
   transition: all 0.28s ease;
@@ -1035,7 +1066,6 @@ const handleLogout = async () => {
   transform: translateY(-8px);
 }
 
-/* فارغ */
 .empty-state {
   text-align: center;
   padding: 55px;
@@ -1066,7 +1096,7 @@ const handleLogout = async () => {
   width: 46px;
   height: 46px;
   border: 4px solid rgba(240, 192, 96, 0.15);
-  border-top-color: #f0c060;
+  border-top-color: #369636;
   border-radius: 50%;
   animation: spin 0.85s linear infinite;
 }
