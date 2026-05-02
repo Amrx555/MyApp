@@ -299,7 +299,7 @@ const handleLogout = async () => {
 
 /* ===== لينكات ===== */
 .nav-links {
-  display: flex;
+  display: none;
   align-items: center;
   gap: 2px;
   flex: 1;
