@@ -21,20 +21,10 @@
           </svg>
         </div>
         <div class="logo-text-wrap">
-          <span class="logo-main">NEXUS</span>
+          <span class="logo-main">My App</span>
           <span class="logo-dot">●</span>
         </div>
       </router-link>
-      <div class="nav-links" :class="{ open: menuOpen }">
-        <router-link to="/providers" class="nav-link nav-btn">
-          Providers
-        </router-link>
-
-        <router-link to="/provider" class="nav-link nav-btn">
-          Provider
-        </router-link>
-      </div>
-
       <div class="nav-right">
         <div class="settings-wrap" ref="settingsRef">
           <button
@@ -140,7 +130,6 @@ import { supabase } from "../supabase";
 
 const user = ref(null);
 const isAdmin = ref(false);
-const menuOpen = ref(false);
 const settingsOpen = ref(false);
 const settingsRef = ref(null);
 const isDark = ref(true);
@@ -173,11 +162,6 @@ const handleOutsideClick = (e) => {
   if (settingsRef.value && !settingsRef.value.contains(e.target)) {
     settingsOpen.value = false;
   }
-};
-
-const toggleDark = () => {
-  isDark.value = !isDark.value;
-  document.documentElement.classList.toggle("dark", isDark.value);
 };
 </script>
 
